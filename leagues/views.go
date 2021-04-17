@@ -10,6 +10,9 @@ func TeamsView() gin.HandlerFunc {
 	matches := ReadLeagueMatchesFromCsv(LeagueMatchesCsvFile)
 	allTeams := GetUniqueTeamNames(matches)
 	return func(context *gin.Context) {
+		if allTeams == nil {
+			allTeams = []string{}
+		}
 		context.JSON(200, allTeams)
 	}
 }
@@ -18,6 +21,9 @@ func LeaguesView() gin.HandlerFunc {
 	matches := ReadLeagueMatchesFromCsv(LeagueMatchesCsvFile)
 	allLeagues := GetUniqueLeagueNames(matches)
 	return func(context *gin.Context) {
+		if allLeagues == nil {
+			allLeagues = []string{}
+		}
 		context.JSON(200, allLeagues)
 	}
 }
@@ -26,6 +32,9 @@ func SeasonsView() gin.HandlerFunc {
 	matches := ReadLeagueMatchesFromCsv(LeagueMatchesCsvFile)
 	allSeasons := GetUniqueSeasonNames(matches)
 	return func(context *gin.Context) {
+		if allSeasons == nil {
+			allSeasons = []string{}
+		}
 		context.JSON(200, allSeasons)
 	}
 }
@@ -34,6 +43,9 @@ func TeamsByLeagueView() gin.HandlerFunc {
 	matches := ReadLeagueMatchesFromCsv(LeagueMatchesCsvFile)
 	teamsByLeague := GetUniqueTeamNamesByLeague(matches)
 	return func(context *gin.Context) {
+		if teamsByLeague == nil {
+			teamsByLeague = make(map[string][]string)
+		}
 		context.JSON(200, teamsByLeague)
 	}
 }
@@ -78,6 +90,9 @@ func LeagueMatchesView() gin.HandlerFunc {
 			maxGd, _ := strconv.Atoi(maxGoalDifference)
 			matches = FilterByMaxGoalDifference(matches, maxGd)
 		}
+		if matches == nil {
+			matches = []LeagueMatch{}
+		}
 		context.JSON(200, matches)
 	}
 }
@@ -88,6 +103,9 @@ func LeagueStandingsView() gin.HandlerFunc {
 		season := context.Query("season")
 		matches := ReadLeagueMatchesFromCsv(LeagueMatchesCsvFile)
 		leagueStandings := GetLeagueStandings(matches, league, season)
+		if leagueStandings == nil {
+			leagueStandings = []LeagueStanding{}
+		}
 		context.JSON(200, leagueStandings)
 	}
 }
